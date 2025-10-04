@@ -2,42 +2,52 @@ package com.amepets.demo.model;
 import jakarta.persistence.*;
 import java.util.List;
 
+
+
+import java.util.List;
+
 @Entity
-@Table(name = "adotante")
-public class adotanteEntity {
+@Table(name = "adotante_table")
+public class AdotanteEntity extends DefaultPerson {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "nome")
-    private String nome;
+    @OneToOne
+    @JoinColumn(name = "endereco_id")
+    private EnderecoEntity enderecos;
 
-    @Column(name = "email", unique = true)
-    private String email;
+    @OneToMany(mappedBy = "adotante")
+    private List<HistoricoAdocaoEntity> historicoAdocao;
 
-    @Column(name = "senha")
-    private String senha;
-
-    @Column(name = "cpf", unique = true)
-    private String cpf;
-
-    @Column(name = "telefone", unique = true)
-    private String telefone;
-
-    @OneToMany(mappedBy = "adotante", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<historicoAdotante> historicoAdocoes;
-    
-    public adotanteEntity() {
+    // Construtor com todos os atributos //
+    public AdotanteEntity(String name, String email, String password, String cpf, String telefone, EnderecoEntity enderecos, List<HistoricoAdocaoEntity> historicoAdocao) {
+        super(name, email, password, cpf, telefone);
+        this.enderecos = enderecos;
+        this.historicoAdocao = historicoAdocao;
     }
 
-    public adotanteEntity(List<historicoAdotante> historicoAdocoes, String telefone, String cpf, String senha, String email, String nome, Long id) {
-        this.historicoAdocoes = historicoAdocoes;
-        this.telefone = telefone;
-        this.cpf = cpf;
-        this.senha = senha;
-        this.email = email;
-        this.nome = nome;
-        this.id = id;
+    // Construtor vazio para gerar um bean //
+    public AdotanteEntity() {
+        super();
+    }
+
+    public List<HistoricoAdocaoEntity> getHistoricoAdocao() {
+        return historicoAdocao;
+    }
+
+    public void setHistoricoAdocao(List<HistoricoAdocaoEntity> historicoAdocao) {
+        this.historicoAdocao = historicoAdocao;
+    }
+
+    public EnderecoEntity getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos ( EnderecoEntity enderecos) {
+        this.enderecos = enderecos;
     }
 
     public Long getId() {
@@ -48,51 +58,5 @@ public class adotanteEntity {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
-    }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public List<historicoAdotante> getHistoricoAdocoes() {
-        return historicoAdocoes;
-    }
-
-    public void setHistoricoAdocoes(List<historicoAdotante> historicoAdocoes) {
-        this.historicoAdocoes = historicoAdocoes;
-    }
 }
